@@ -16,24 +16,15 @@ The Apache HTTP Server is a project of The Apache Software Foundation.
 ## Different Versions
 
 ### Full Version
-The [full Apache2 Version](https://github.com/FaserF/hassio-addons/tree/master/apache2) with MariaDB and common used PHP 8 modules. <br />
+The [full Apache2 Version](https://github.com/kecajtop/hassio-addons/tree/master/apache2) with MariaDB and common used PHP 8 modules. <br />
 This docker image comes with: apache2 php84-apache2 libxml2-dev apache2-utils apache2-mod-wsgi apache2-ssl mariadb-client ffmpeg<br />
 The following php84 extensions will be installed: php84 php84-dev php84-fpm php84-mysqli php84-opcache php84-gd zlib php84-curl php84-phar php84-mbstring php84-zip php84-pdo php84-pdo_mysql php84-iconv php84-dom php84-session php84-intl php84-soap php84-fileinfo php84-xml php84-ctype php84-pecl-xdebug php84-pdo_sqlite php84-tokenizer php84-exif php84-xmlwriter php84-cgi php84-simplexml php84-gd php84-json php84-imap php84-apcu php84-simplexml<br />
 Mosquitto & Mosquitto Dev<br />
 And it comes with php locales.
 
-### Minimal Version
-The [Minimal Version](https://github.com/FaserF/hassio-addons/tree/master/apache2-minimal) of the Apache2 Addon without MariaDB and with no PHP modules. <br />
-This docker image comes with: apache2 libxml2-dev apache2-utils apache2-mod-wsgi apache2-ssl
-
-### Minimal Version with MariaDB
-The [Minimal Version with MariaDB and some PHP modules](https://github.com/FaserF/hassio-addons/tree/master/apache2-minimal-mariadb) of the Apache2 Addon. <br />
-This docker image comes with: apache2 php84-apache2 libxml2-dev apache2-utils apache2-mod-wsgi apache2-ssl mariadb-client<br />
-The following php84 extensions will be installed: php84 php84-mysqli php84-opcache php84-curl php84-mbstring php84-zip
-
 ## Installation
 
-[![FaserF Homeassistant Addons](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FFaserF%2Fhassio-addons)
+[![FaserF Homeassistant Addons](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FkecajtopF%2Fhassio-addons)
 <br />
 The installation of this add-on is pretty straightforward and not different in comparison to installing any other custom Home Assistant add-on.<br />
 Just click the link above or add my repo to the hassio addons repositorys: <https://github.com/FaserF/hassio-addons>
