@@ -43,7 +43,7 @@ schema:
   init_commands:
     - str?
 ports:
-  80/tcp: 8081
+  80/tcp: 80
   443/tcp: 8324
 ports_description:
   80/tcp: Web interface http
