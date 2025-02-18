@@ -1,5 +1,5 @@
 name: Apache2
-version: 1.0.5
+version: 1.0.6
 slug: apache2
 description: OpenSource Webserver with PHP and MariaDB
 url: https://github.com/kecajtop/hassio-addons/tree/master/apache2
@@ -11,7 +11,7 @@ arch:
   - i386
 startup: application
 boot: auto
-webui: http://[HOST]:[PORT:8081]
+webui: http://[HOST]:[PORT:81]
 map:
   - ssl:rw
   - media:rw
