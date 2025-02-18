@@ -19,7 +19,6 @@ RUN apk --no-cache add mariadb-client
 RUN apk --no-cache add ffmpeg
 
 RUN apk --no-cache add composer
-RUN composer require php-mqtt/client
 
 #musl-locales/php-locales
 RUN apk add --no-cache cmake make musl-dev gcc gettext-dev libintl
