@@ -13,9 +13,11 @@ RUN apk --no-cache add \
     php84-json \
     php84-imap \
     php84-apcu
-RUN apk --no-cache add mosquitto mosquitto-dev
+RUN apk --no-cache add composer
+RUN apk --no-cache add mosquitto mosquitto-devcomposer require php-mqtt/client
 RUN apk --no-cache add mariadb-client
 RUN apk --no-cache add ffmpeg
+RUN composer require php-mqtt/client
 
 #musl-locales/php-locales
 RUN apk add --no-cache cmake make musl-dev gcc gettext-dev libintl
