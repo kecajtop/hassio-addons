@@ -22,8 +22,6 @@ RUN apk --no-cache add composer
 
 RUN apk --no-cache add git
 
-RUN composer require php-mqtt/client
-
 #musl-locales/php-locales
 RUN apk add --no-cache cmake make musl-dev gcc gettext-dev libintl
 RUN wget https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip \
