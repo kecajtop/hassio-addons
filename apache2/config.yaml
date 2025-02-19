@@ -1,5 +1,5 @@
 name: Apache2
-version: 1.0.10
+version: 1.0.11
 slug: apache2
 description: OpenSource Webserver with PHP and MariaDB
 url: https://github.com/kecajtop/hassio-addons/tree/master/apache2
