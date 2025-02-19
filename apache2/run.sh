@@ -172,6 +172,8 @@ fi
 
 mkdir /usr/lib/php84/modules/opcache
 
+git clone https://github.com/kecajtop/mqtt_php.git  $webrootdocker
+
 composer require php-mqtt/client
 
 echo "Here is your web file architecture."
