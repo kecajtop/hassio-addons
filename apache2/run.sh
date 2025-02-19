@@ -172,6 +172,8 @@ fi
 
 mkdir /usr/lib/php84/modules/opcache
 
+composer require php-mqtt/client
+
 echo "Here is your web file architecture."
 ls -l $webrootdocker
 
