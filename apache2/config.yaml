@@ -1,5 +1,5 @@
 name: Apache2
-version: 1.0.14
+version: 1.0.15
 slug: apache2
 description: OpenSource Webserver with PHP and MariaDB
 url: https://github.com/kecajtop/hassio-addons/tree/master/apache2
@@ -20,7 +20,7 @@ ingress: true
 init: false
 panel_icon: mdi:web-box
 options:
-  document_root: /share/htdocs1
+  document_root: /share/htdocs
   php_ini: default
   default_conf: default
   default_ssl_conf: default
