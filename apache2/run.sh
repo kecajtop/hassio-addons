@@ -178,6 +178,6 @@ composer require php-mqtt/client -vvv
 
 echo "Here is your web file architecture."
 ls -l $webrootdocker
-
+ls /var/www/
 echo "Starting Apache2..."
 exec /usr/sbin/httpd -D FOREGROUND
