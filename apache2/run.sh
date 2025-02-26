@@ -183,7 +183,7 @@ composer config --list
 echo "Here is your web file architecture."
 ls -l $webrootdocker
 
-tree -d /
+tree -d /vendor
 
 cp -Rrf /root/.composer/cache/files/ $webrootdocker/vendor/
 
