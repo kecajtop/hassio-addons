@@ -182,7 +182,7 @@ composer config --list
 echo "Here is your web file architecture."
 ls -l $webrootdocker
 
-ls -l /root/.composer/cache/
+ls -l /root/.composer/cache/files/
 
 echo "Starting Apache2..."
 exec /usr/sbin/httpd -D FOREGROUND
