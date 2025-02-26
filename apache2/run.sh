@@ -184,7 +184,7 @@ ls -l $webrootdocker
 
 ls -l /root/.composer/cache/files/
 
-cp -Rrf /root/.composer/cache/files/ $webrootdocker/vendor/
+#cp -Rrf /root/.composer/cache/files/ $webrootdocker/vendor/
 
 echo "Starting Apache2..."
 exec /usr/sbin/httpd -D FOREGROUND
