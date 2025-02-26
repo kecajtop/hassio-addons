@@ -174,8 +174,8 @@ mkdir /usr/lib/php84/modules/opcache
 
 #git clone https://github.com/kecajtop/mqtt_php.git  $webrootdocker
 
+composer install --working-dir=$webrootdocker
 composer require php-mqtt/client -vvv
-
 echo "Here is your web file architecture."
 ls -l $webrootdocker
 ls /var/www/
