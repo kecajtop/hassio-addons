@@ -1,4 +1,4 @@
-ARG BUILD_FROM=debian:12.9-slim
+ARG BUILD_FROM=ubuntu:noble
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -32,14 +32,12 @@ RUN \
     apt-get update \
     \
     && apt-get install -y --no-install-recommends \
-        bash=5.2.15-2+b7 \
-        ca-certificates=20230311 \
-        curl=7.88.1-10+deb12u8 \
-        jq=1.6-2.1 \
-        tzdata=2024b-0+deb12u1 \
-        xz-utils=5.4.1-0.2 \
-    \
-    && c_rehash \
+        ca-certificates=20240203 \
+        curl=8.5.0-2ubuntu10.6 \
+        jq=1.7.1-3build1 \
+        tzdata=2024b-0ubuntu0.24.04.1 \
+        xz-utils=5.6.1+really5.4.5-1 \
+        git=
     \
     && S6_ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "i386" ]; then S6_ARCH="i686"; \
@@ -83,9 +81,6 @@ RUN \
         /var/{cache,log}/* \
         /var/lib/apt/lists/*
 
-RUN apt-get install git apache2 apache2-utils openssl
-
-
 # Copy root filesystem
 COPY rootfs /
 
@@ -103,17 +98,17 @@ ARG BUILD_REPOSITORY
 
 # Labels
 LABEL \
-    io.hass.name="Addon Debian base for ${BUILD_ARCH}" \
-    io.hass.description="Home Assistant Community Add-on: ${BUILD_ARCH} Debian base image" \
+    io.hass.name="Addon Ubuntu base for ${BUILD_ARCH}" \
+    io.hass.description="Home Assistant Community Add-on: ${BUILD_ARCH} Ubuntu base image" \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="base" \
     io.hass.version=${BUILD_VERSION} \
     io.hass.base.version=${BUILD_VERSION} \
-    io.hass.base.name="debian" \
-    io.hass.base.image="hassioaddons/debian-base" \
+    io.hass.base.name="ubuntu" \
+    io.hass.base.image="hassioaddons/ubuntu-base" \
     maintainer="Franck Nijhof <frenck@addons.community>" \
-    org.opencontainers.image.title="Addon Debian base for ${BUILD_ARCH}" \
-    org.opencontainers.image.description="Home Assistant Community Add-on: ${BUILD_ARCH} Debian base image" \
+    org.opencontainers.image.title="Addon Ubuntu base for ${BUILD_ARCH}" \
+    org.opencontainers.image.description="Home Assistant Community Add-on: ${BUILD_ARCH} Ubuntu base image" \
     org.opencontainers.image.vendor="Home Assistant Community Add-ons" \
     org.opencontainers.image.authors="Franck Nijhof <frenck@addons.community>" \
     org.opencontainers.image.licenses="MIT" \
