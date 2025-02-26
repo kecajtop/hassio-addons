@@ -177,6 +177,8 @@ mkdir /usr/lib/php84/modules/opcache
 #composer install --working-dir=$webrootdocker
 composer require php-mqtt/client -vvv
 
+composer config --list
+
 echo "Here is your web file architecture."
 ls -l $webrootdocker
 
