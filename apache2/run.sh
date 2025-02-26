@@ -182,8 +182,6 @@ composer config --list
 echo "Here is your web file architecture."
 ls -l $webrootdocker
 
-mkdir $webrootdocker/vendor/
-
 ls -l /root/.composer/cache/files/
 
 cp -R /root/.composer/cache/files/ $webrootdocker/vendor/
