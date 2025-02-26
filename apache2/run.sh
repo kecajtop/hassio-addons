@@ -176,6 +176,7 @@ mkdir /usr/lib/php84/modules/opcache
 
 #composer install --working-dir=$webrootdocker
 composer require php-mqtt/client -vvv
+composer dump-autoload -vvv
 
 composer config --list
 
