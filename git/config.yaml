@@ -1,6 +1,6 @@
 ---
 name: Git
-version: 1.0.2
+version: 1.0.3
 slug: ubuntu-base
 description: Docker Ubuntu base images used by Home Assistant Community Add-ons Git server.
 url: https://github.com/hassio-addons/addon-ubuntu-base
