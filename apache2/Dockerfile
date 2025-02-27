@@ -20,7 +20,7 @@ RUN apk --no-cache add ffmpeg
 
 RUN apk --no-cache add composer
 
-RUN composer require php-mqtt/client
+RUN apk --no-cache add git
 
 #musl-locales/php-locales
 RUN apk add --no-cache cmake make musl-dev gcc gettext-dev libintl

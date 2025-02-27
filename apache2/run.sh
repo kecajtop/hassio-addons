@@ -172,8 +172,18 @@ fi
 
 mkdir /usr/lib/php84/modules/opcache
 
+#git clone https://github.com/kecajtop/mqtt_php.git  $webrootdocker
+
+#composer install --working-dir=$webrootdocker
+composer require php-mqtt/client -vvv
+composer dump-autoload -vvv
+
+composer config --list
+
 echo "Here is your web file architecture."
 ls -l $webrootdocker
+
+cp -Rrf /vendor/ $webrootdocker/vendor/
 
 echo "Starting Apache2..."
 exec /usr/sbin/httpd -D FOREGROUND
