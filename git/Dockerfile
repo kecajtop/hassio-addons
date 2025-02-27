@@ -37,7 +37,7 @@ RUN \
         jq=1.7.1-3build1 \
         tzdata=2024b-0ubuntu0.24.04.1 \
         xz-utils=5.6.1+really5.4.5-1 \
-        git \
+        git=1:2.43.0-1ubuntu7.2 \
     \
     && S6_ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "i386" ]; then S6_ARCH="i686"; \
