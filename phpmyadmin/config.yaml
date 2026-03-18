@@ -2,7 +2,7 @@
 name: phpMyAdmin
 version: 1.0.0
 slug: phpmyadmin
-description: A web interface for the official MariaDB add-on
+description: A web interface for MariaDB/MySQL add-ons exposing the mysql service
 url: https://github.com/hassio-addons/addon-phpmyadmin
 codenotary: codenotary@frenck.dev
 ingress: true

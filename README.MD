@@ -13,6 +13,10 @@ Just click the link above or add my repo to the hassio addons repositorys: https
 
 ## Add-On List
 
+### MariaDB
+MySQL-compatible database server for Home Assistant and phpMyAdmin.
+[MariaDB](https://github.com/kecajtop/hassio-addons/tree/master/mariadb)<br />
+
 ### Apache2
 Webserver Addon
 [Normal (comes with the most used PHP Extensions, MariaDB)] (https://github.com/kecajtop/hassio-addons/tree/master/apache2)<br />

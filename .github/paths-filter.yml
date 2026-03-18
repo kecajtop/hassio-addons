@@ -5,6 +5,7 @@ apache2-minimal: apache2-minimal/**
 apache2-minimal-mariadb: apache2-minimal-mariadb/**
 bash_script_executer: bash_script_executer/**
 bt-mqtt-gateway: bt-mqtt-gateway/**
+mariadb: mariadb/**
 matterbridge: matterbridge/**
 netboot-xyz: netboot-xyz/**
 openssl: openssl/**

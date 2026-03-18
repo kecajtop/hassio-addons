@@ -5,8 +5,8 @@ used operations (managing databases, tables, columns, relations, indexes,
 users, permissions, etc) can be performed via the user interface,
 while you still have the ability to directly execute any SQL statement.
 
-This add-on was specifically designed to manage the official Home Assistant
-MariaDB add-on.
+This add-on connects to the Home Assistant `mysql` service published by a
+compatible database add-on, including the `MariaDB` add-on in this repository.
 
 ## Installation
 
@@ -59,9 +59,11 @@ you are troubleshooting.
 
 ## Known issues and limitations
 
-- This add-on needs the core MariaDB add-on version 2.0 or higher.
-- This add-on is created to allow management of the official Home assistant
-  MariaDB add-on. It cannot connect to other MySQL or MariaDB servers.
+- This add-on needs a Home Assistant add-on that publishes the `mysql` service.
+- In this repository, install and start the `MariaDB` add-on before starting
+  `phpMyAdmin`.
+- This add-on is wired to the Supervisor service discovery mechanism. It is not
+  intended for manually configured external MySQL or MariaDB servers.
 
 ## Changelog & Releases
 
