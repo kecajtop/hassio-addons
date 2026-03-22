@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Regały | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Regały</span>
+            <h2>Lista regałów</h2>
+        </div>
+        <div class="action-row">
+            <a class="ghost-button" href="{{ url_for('tools') }}">Przejdź do listy narzędzi</a>
+            {% if can_manage_racks %}
+            <a class="primary-button" href="{{ url_for('rack_create') }}">Dodaj regał</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Układ półek</th>
+                    <th>Orientacja</th>
+                    <th>Narzędzia</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rack in racks %}
+                <tr>
+                    <td><strong>{{ rack.name }}</strong></td>
+                    <td>{{ rack.description or 'Bez opisu' }}</td>
+                    <td>
+                        <div>{{ rack.shelf_count }} półek</div>
+                        <div class="muted small-text">{{ rack.shelves or 'Brak danych' }}</div>
+                    </td>
+                    <td>{{ rack.orientation or 'H' }}</td>
+                    <td>{{ rack['items']|length }}</td>
+                    <td>
+                        <div class="action-row">
+                            {% if can_manage_racks %}
+                            <a class="ghost-button" href="{{ url_for('rack_edit', rack_id=rack.id) }}">Edytuj</a>
+                            <form method="post" action="{{ url_for('rack_delete', rack_id=rack.id) }}" onsubmit="return confirm('Usunąć regał?');">
+                                <button class="ghost-button ghost-button-danger" type="submit">Usuń</button>
+                            </form>
+                            {% endif %}
+                            <a class="ghost-button" href="{{ url_for('tools', rack_id=rack.id) }}">Pokaż narzędzia</a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">Brak regałów do wyświetlenia.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel table-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Podgląd</span>
+            <h2>Graficzna reprezentacja regału</h2>
+        </div>
+    </div>
+
+    <div class="rack-visual-layout">
+        <div class="rack-visual-sidebar">
+            <label class="field">
+                <span>Wybierz regał</span>
+                <select id="rack-preview-select">
+                    {% for rack in racks %}
+                    <option value="{{ rack.id }}">{{ rack.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <div id="rack-preview-meta" class="rack-preview-meta"></div>
+            <div id="rack-preview-items" class="rack-preview-items"></div>
+        </div>
+
+        <div class="rack-visual-canvas-wrap">
+            <canvas id="rack-preview-canvas" width="880" height="420"></canvas>
+        </div>
+    </div>
+</section>
+
+<script id="racks-json" type="application/json">{{ racks_json|tojson }}</script>
+<script src="{{ url_for('static', filename='js/rack_visualization.js') }}"></script>
+<script src="{{ url_for('static', filename='js/racks_page.js') }}"></script>
+{% endblock %}

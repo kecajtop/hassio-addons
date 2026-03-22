@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Pomoc | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="hero panel">
+    <div>
+        <span class="eyebrow">Pomoc</span>
+        <h2>Samouczek i informacje o programie</h2>
+    </div>
+    <div class="action-row">
+        <a class="ghost-button" href="{{ url_for('dashboard') }}">Powrót do pulpitu</a>
+        <a class="primary-button" href="{{ url_for('light_mode') }}">Otwórz wersję light</a>
+    </div>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">Samouczek</span>
+                <h3>Jak korzystać z programu</h3>
+            </div>
+        </div>
+
+        <div class="task-list">
+            <div class="task-item">
+                <div class="task-item-main">
+                    <strong>1. Zaloguj się do systemu</strong>
+                    <div class="muted small-text">Po zalogowaniu trafisz na pulpit z podsumowaniem regałów, narzędzi i zadań.</div>
+                </div>
+            </div>
+            <div class="task-item">
+                <div class="task-item-main">
+                    <strong>2. Wyszukaj narzędzie</strong>
+                    <div class="muted small-text">Przejdź do widoku Narzędzia albo użyj wersji light, aby szybko znaleźć po nazwie, opisie i regale.</div>
+                </div>
+            </div>
+            <div class="task-item">
+                <div class="task-item-main">
+                    <strong>3. Sprawdź położenie na regale</strong>
+                    <div class="muted small-text">Zakładka Regały pokazuje graficzny układ półek, przypisane pozycje i osobno narzędzia nieprzypisane.</div>
+                </div>
+            </div>
+            <div class="task-item">
+                <div class="task-item-main">
+                    <strong>4. Dodawaj i edytuj dane</strong>
+                    <div class="muted small-text">Użytkownicy z odpowiednimi uprawnieniami mogą dodawać narzędzia, aktualizować regały i zarządzać zadaniami.</div>
+                </div>
+            </div>
+            <div class="task-item">
+                <div class="task-item-main">
+                    <strong>5. Zgłaszaj pomysły w Sugestiach</strong>
+                    <div class="muted small-text">W zakładce Sugestie można zapisać pomysł lub problem i dołączyć pliki przechowywane bezpośrednio w bazie danych.</div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">O programie</span>
+                <h3>Zakres i przeznaczenie</h3>
+            </div>
+        </div>
+
+        <div class="rack-overview-list">
+            <div class="rack-overview-item">
+                <div>
+                    <strong>Cel systemu</strong>
+                    <span>Program wspiera ewidencję narzędzi, lokalizację na regałach i codzienną pracę magazynową.</span>
+                </div>
+            </div>
+            <div class="rack-overview-item">
+                <div>
+                    <strong>Bazy danych</strong>
+                    <span>Aplikacja korzysta z lokalnej bazy regału narzędziowego oraz bazy zakupy1 do logowania i sugestii.</span>
+                </div>
+            </div>
+            <div class="rack-overview-item">
+                <div>
+                    <strong>Główne moduły</strong>
+                    <span>Pulpit, Narzędzia, Regały, Zadania, Sugestie, Użytkownicy oraz publiczna wersja light.</span>
+                </div>
+            </div>
+            <div class="rack-overview-item">
+                <div>
+                    <strong>Wizualizacja regałów</strong>
+                    <span>Widok regału pokazuje pola zajęte, archiwalne, wyniki wyszukiwania i narzędzia bez przypisanego miejsca.</span>
+                </div>
+            </div>
+            <div class="rack-overview-item">
+                <div>
+                    <strong>Aktualny port uruchomienia</strong>
+                    <span>Domyślny start aplikacji jest ustawiony na port 5001, co ułatwia wdrożenie w środowisku Home Assistant.</span>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+{% endblock %}

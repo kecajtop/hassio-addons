@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Logowanie | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="login-layout">
+    <form class="panel login-panel" method="post">
+        <span class="panel-badge">Dostęp</span>
+        <h3>Zaloguj się</h3>
+
+        {% if error %}
+        <div class="flash flash-error">{{ error }}</div>
+        {% endif %}
+
+        <label class="field">
+            <span>Login</span>
+            <input type="text" name="username" autocomplete="username" required>
+        </label>
+
+        <label class="field">
+            <span>Hasło</span>
+            <input type="password" name="password" autocomplete="current-password" required>
+        </label>
+
+        <button class="primary-button" type="submit">Zaloguj</button>
+    </form>
+</section>
+{% endblock %}

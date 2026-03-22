@@ -1,0 +1,30 @@
+name: PHP Server
+version: "0.1.0"
+slug: php_server
+description: Uruchamia prosty serwer PHP z plikow w /config/php_server
+url: https://example.local/php-server
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - i386
+startup: application
+boot: auto
+init: false
+host_network: true
+ports:
+  8080/tcp: 8080
+ports_description:
+  8080/tcp: PHP Server
+panel_icon: mdi:language-php
+panel_title: PHP Server
+map:
+  - config:rw
+options:
+  document_root: /config/php_server
+  host: 0.0.0.0
+  port: 8080
+schema:
+  document_root: str
+  host: str
+  port: port

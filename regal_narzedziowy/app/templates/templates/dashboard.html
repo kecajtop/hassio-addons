@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Pulpit | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="hero panel">
+    <div>
+        <span class="eyebrow">Pulpit</span>
+        <h2>Przegląd regałów i narzędzi</h2>
+    </div>
+    <a class="primary-button" href="{{ url_for('tool_create') }}">Dodaj nowe narzędzie</a>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span>Regały</span>
+        <strong>{{ totals.rack_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Wszystkie narzędzia</span>
+        <strong>{{ totals.tool_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Aktywne</span>
+        <strong>{{ totals.active_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Zarchiwizowane</span>
+        <strong>{{ totals.archived_count }}</strong>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="section-heading">
+            <h3>Ostatnie pozycje</h3>
+            <a href="{{ url_for('tools') }}">Zobacz wszystkie</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Regał</th>
+                        <th>Pozycja</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tool in recent_tools %}
+                    <tr>
+                        <td><a href="{{ url_for('tool_edit', tool_id=tool.id) }}">{{ tool.name }}</a></td>
+                        <td>{{ tool.rack_name or 'Brak' }}</td>
+                        <td>{{ tool.shelf }} / {{ tool.position }}</td>
+                        <td>
+                            {% if tool.archive %}
+                            <span class="pill pill-warn">archiwum</span>
+                            {% else %}
+                            <span class="pill pill-ok">aktywne</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4">Brak danych do wyświetlenia.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="section-heading">
+            <h3>Obsadzenie regałów</h3>
+            <a href="{{ url_for('racks') }}">Przejdź do widoku regałów</a>
+        </div>
+        <div class="rack-overview-list">
+            {% for rack in racks %}
+            <div class="rack-overview-item">
+                <div>
+                    <strong>{{ rack.name }}</strong>
+                    <span>{{ rack.description or 'Bez opisu' }}</span>
+                </div>
+                <div class="pill pill-neutral">{{ rack['items']|length }} narzędzi</div>
+            </div>
+            {% else %}
+            <p class="muted">Brak regałów w bazie danych.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

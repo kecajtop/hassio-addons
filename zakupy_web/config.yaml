@@ -1,0 +1,38 @@
+name: Zakupy Web
+version: "0.1.2"
+slug: zakupy_web
+description: Uruchamia aplikacje Zakupy Web z plikow w /config/zakupy
+url: https://example.local/zakupy
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - i386
+startup: application
+boot: auto
+init: false
+host_network: true
+ports:
+  5000/tcp: 5000
+ports_description:
+  5000/tcp: Zakupy Web
+panel_icon: mdi:cart
+panel_title: Zakupy Web
+map:
+  - config:rw
+options:
+  mysql_host: 10.0.3.1
+  mysql_user: root
+  mysql_password: regal
+  mysql_db: zakupy1
+  upload_folder: /config/zakupy/uploads
+  host: 0.0.0.0
+  port: 5000
+schema:
+  mysql_host: str
+  mysql_user: str
+  mysql_password: password
+  mysql_db: str
+  upload_folder: str
+  host: str
+  port: port

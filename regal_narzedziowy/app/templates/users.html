@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Użytkownicy | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading users-heading">
+        <div>
+            <span class="eyebrow">Użytkownicy</span>
+            <h2>Lokalny dostęp do systemu regałów</h2>
+        </div>
+        <div class="pill pill-neutral">{{ users|length }} kont</div>
+    </div>
+</section>
+
+<section class="stats-grid compact-stats">
+    <article class="stat-card">
+        <span>Konta w zakupy1</span>
+        <strong>{{ user_stats.auth_total_users or 0 }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Skonfigurowane lokalnie</span>
+        <strong>{{ user_stats.configured_users or 0 }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Aktywne lokalnie</span>
+        <strong>{{ user_stats.active_local_users or 0 }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Managerowie i admini</span>
+        <strong>{{ (user_stats.manager_users or 0) + (user_stats.admin_users or 0) }}</strong>
+    </article>
+</section>
+
+<section class="panel">
+    <form class="filters users-filters" method="get">
+        <label class="field field-wide">
+            <span>Szukaj</span>
+            <input type="search" name="q" value="{{ search_text }}" placeholder="Login, imię, nazwisko, dział">
+        </label>
+
+        <label class="field">
+            <span>Dostęp lokalny</span>
+            <select name="status">
+                <option value="all" {% if selected_status == 'all' %}selected{% endif %}>Wszystkie</option>
+                <option value="configured" {% if selected_status == 'configured' %}selected{% endif %}>Skonfigurowane</option>
+                <option value="active-local" {% if selected_status == 'active-local' %}selected{% endif %}>Aktywne lokalnie</option>
+                <option value="inactive-local" {% if selected_status == 'inactive-local' %}selected{% endif %}>Nieaktywne lokalnie</option>
+                <option value="missing-local" {% if selected_status == 'missing-local' %}selected{% endif %}>Bez wpisu lokalnego</option>
+            </select>
+        </label>
+
+        <div class="form-actions users-filter-actions">
+            <button class="primary-button" type="submit">Filtruj</button>
+            <a class="ghost-button" href="{{ url_for('users') }}">Wyczyść</a>
+        </div>
+    </form>
+</section>
+
+<section class="panel table-panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Użytkownik</th>
+                    <th>Imię i nazwisko</th>
+                    <th>Dział</th>
+                    <th>Rola lokalna</th>
+                    <th>Dostęp lokalny</th>
+                    <th>Ostatnie logowanie lokalne</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auth_user in users %}
+                <tr>
+                    <td>
+                        <strong>{{ auth_user.username }}</strong>
+                    </td>
+                    <td>{{ auth_user.full_name or 'Brak danych' }}</td>
+                    <td>{{ auth_user.department or 'Brak' }}</td>
+                    <td>
+                        {% if auth_user.local_role %}
+                        <span class="pill pill-neutral">{{ auth_user.local_role }}</span>
+                        {% else %}
+                        <span class="pill pill-warn">brak</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="status-stack">
+                            {% if auth_user.has_local_access and auth_user.local_is_active %}
+                            <span class="pill pill-ok">aktywny</span>
+                            {% elif auth_user.has_local_access %}
+                            <span class="pill pill-warn">nieaktywny</span>
+                            {% else %}
+                            <span class="pill pill-warn">brak dostępu</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>{{ auth_user.local_last_login.strftime('%Y-%m-%d %H:%M') if auth_user.local_last_login else 'Brak' }}</td>
+                    <td>
+                        <div class="action-row">
+                            <a class="ghost-button" href="{{ url_for('user_edit', user_id=auth_user.id) }}">{% if auth_user.has_local_access %}Edytuj dostęp{% else %}Skonfiguruj{% endif %}</a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">Brak użytkowników w zakupy1.users dla wybranych filtrów.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

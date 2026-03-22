@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Narzędzia | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Narzędzia</span>
+            <h2>Lista i wyszukiwanie</h2>
+        </div>
+        <a class="primary-button" href="{{ url_for('tool_create') }}">Dodaj narzędzie</a>
+    </div>
+
+    <form class="filters" method="get">
+        <label class="field">
+            <span>Szukaj</span>
+            <input type="search" name="q" value="{{ search_text }}" placeholder="Nazwa, opis, regał">
+        </label>
+
+        <label class="field">
+            <span>Regał</span>
+            <select name="rack_id">
+                <option value="">Wszystkie</option>
+                {% for rack in racks %}
+                <option value="{{ rack.id }}" {% if selected_rack_id == rack.id|string %}selected{% endif %}>{{ rack.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label class="field">
+            <span>Status</span>
+            <select name="archived">
+                <option value="active" {% if archived == 'active' %}selected{% endif %}>Aktywne</option>
+                <option value="archived" {% if archived == 'archived' %}selected{% endif %}>Archiwum</option>
+                <option value="all" {% if archived == 'all' %}selected{% endif %}>Wszystkie</option>
+            </select>
+        </label>
+
+        <label class="checkbox-field">
+            <input type="checkbox" name="has_image" value="1" {% if has_image %}checked{% endif %}>
+            <span>Tylko ze zdjęciem</span>
+        </label>
+
+        <button class="primary-button" type="submit">Filtruj</button>
+    </form>
+</section>
+
+<section class="panel table-panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Zdjęcie</th>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Lokalizacja</th>
+                    <th>Ilość</th>
+                    <th>Status</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tool in tools %}
+                <tr>
+                    <td>
+                        {% if tool_image_url(tool.image) %}
+                        <button
+                            class="tool-thumb-button"
+                            type="button"
+                            data-image-url="{{ tool_image_url(tool.image) }}"
+                            data-image-title="{{ tool.name }}"
+                        >
+                            <img class="tool-thumb" src="{{ tool_image_url(tool.image) }}" alt="{{ tool.name }}">
+                        </button>
+                        <div>
+                            <button
+                                class="ghost-button tool-preview-button"
+                                type="button"
+                                data-image-url="{{ tool_image_url(tool.image) }}"
+                                data-image-title="{{ tool.name }}"
+                            >Podgląd</button>
+                        </div>
+                        {% else %}
+                        <span class="muted small-text">Brak zdjęcia</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>{{ tool.name }}</strong>
+                        {% if tool.link %}
+                        <div><a href="{{ tool.link }}" target="_blank" rel="noreferrer">Link</a></div>
+                        {% endif %}
+                    </td>
+                    <td>{{ tool.description or 'Brak opisu' }}</td>
+                    <td>{{ tool.rack_name or 'Brak' }} / {{ tool.shelf }} / {{ tool.position }}</td>
+                    <td>{{ tool.qty or 0 }}</td>
+                    <td>
+                        {% if tool.archive %}
+                        <span class="pill pill-warn">archiwum</span>
+                        {% else %}
+                        <span class="pill pill-ok">aktywne</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-row">
+                            <a class="ghost-button" href="{{ url_for('tool_edit', tool_id=tool.id) }}">Edytuj</a>
+                            {% if not tool.archive and role_hierarchy[g.user.role] >= role_hierarchy['manager'] %}
+                            <form method="post" action="{{ url_for('tool_archive', tool_id=tool.id) }}">
+                                <button class="ghost-button" type="submit">Archiwizuj</button>
+                            </form>
+                            {% endif %}
+                            {% if role_hierarchy[g.user.role] >= role_hierarchy['admin'] %}
+                            <form method="post" action="{{ url_for('tool_delete', tool_id=tool.id) }}" onsubmit="return confirm('Usunąć narzędzie?');">
+                                <button class="ghost-button ghost-button-danger" type="submit">Usuń</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">Brak wyników dla wybranych filtrów.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div id="tool-image-modal" class="image-modal is-hidden" aria-hidden="true">
+    <div class="image-modal-backdrop" data-close-image-modal="true"></div>
+    <div class="image-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="tool-image-modal-title">
+        <div class="image-modal-header">
+            <strong id="tool-image-modal-title">Podgląd zdjęcia</strong>
+            <button class="ghost-button" type="button" data-close-image-modal="true">Zamknij</button>
+        </div>
+        <div class="image-modal-body">
+            <img id="tool-image-modal-preview" class="image-modal-preview" src="" alt="Podgląd zdjęcia narzędzia">
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/tool_gallery.js', v='20260319c') }}"></script>
+{% endblock %}

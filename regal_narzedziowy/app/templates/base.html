@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Regał narzędziowy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='20260319b') }}">
+</head>
+<body class="app-body">
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="topbar-brand" href="{% if g.user %}{{ url_for('dashboard') }}{% else %}{{ url_for('login') }}{% endif %}">
+                <span class="brand-mark">RN</span>
+                <span class="brand-copy">
+                    <strong>Regał narzędziowy</strong>
+                    <span class="topbar-subtitle">Panel magazynowy</span>
+                </span>
+            </a>
+
+            <nav class="topbar-nav">
+                <a class="nav-link {% if request.endpoint == 'light_mode' %}is-active{% endif %}" href="{{ url_for('light_mode') }}">Wersja light</a>
+                {% if g.user %}
+                <a class="nav-link {% if request.endpoint == 'dashboard' %}is-active{% endif %}" href="{{ url_for('dashboard') }}">Pulpit</a>
+                <a class="nav-link {% if request.endpoint == 'tools' %}is-active{% endif %}" href="{{ url_for('tools') }}">Narzędzia</a>
+                <a class="nav-link {% if request.endpoint == 'racks' %}is-active{% endif %}" href="{{ url_for('racks') }}">Regały</a>
+                <a class="nav-link {% if request.endpoint in ['tasks', 'task_create', 'task_edit'] %}is-active{% endif %}" href="{{ url_for('tasks') }}">Zadania</a>
+                <a class="nav-link {% if request.endpoint in ['suggestions', 'suggestion_attachment_download'] %}is-active{% endif %}" href="{{ url_for('suggestions') }}">Sugestie</a>
+                <a class="nav-link {% if request.endpoint == 'help_page' %}is-active{% endif %}" href="{{ url_for('help_page') }}">Pomoc</a>
+                {% if role_hierarchy[g.user.role] >= role_hierarchy['admin'] %}
+                <a class="nav-link {% if request.endpoint == 'users' %}is-active{% endif %}" href="{{ url_for('users') }}">Użytkownicy</a>
+                {% endif %}
+                <a class="nav-link {% if request.endpoint == 'tool_create' %}is-active{% endif %}" href="{{ url_for('tool_create') }}">Dodaj narzędzie</a>
+                {% endif %}
+            </nav>
+
+            {% if g.user %}
+            <div class="topbar-actions">
+                <div class="user-card user-card--inline">
+                    <strong>{{ g.user.full_name or g.user.username }}</strong>
+                    <span>{% if g.user.department %}Dział: {{ g.user.department }}{% else %}Rola: {{ g.user.role or 'user' }}{% endif %}</span>
+                </div>
+                <form method="post" action="{{ url_for('logout') }}">
+                    <button class="ghost-button" type="submit">Wyloguj</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="page-shell {% if not g.user %}page-shell--login{% endif %}">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Pulpit | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="hero panel">
+    <div>
+        <span class="eyebrow">Pulpit</span>
+        <h2>Przegląd regałów i narzędzi</h2>
+    </div>
+    <div class="action-row">
+        <a class="ghost-button" href="{{ url_for('light_mode') }}">Otwórz wersję light</a>
+        <a class="ghost-button" href="{{ url_for('suggestions') }}">Dodaj sugestię</a>
+        <a class="primary-button" href="{{ url_for('tool_create') }}">Dodaj nowe narzędzie</a>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <article class="stat-card">
+        <span>Regały</span>
+        <strong>{{ totals.rack_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Wszystkie narzędzia</span>
+        <strong>{{ totals.tool_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Aktywne</span>
+        <strong>{{ totals.active_count }}</strong>
+    </article>
+    <article class="stat-card">
+        <span>Zarchiwizowane</span>
+        <strong>{{ totals.archived_count }}</strong>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="section-heading">
+            <h3>Ostatnie pozycje</h3>
+            <a href="{{ url_for('tools') }}">Zobacz wszystkie</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Regał</th>
+                        <th>Pozycja</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tool in recent_tools %}
+                    <tr>
+                        <td><a href="{{ url_for('tool_edit', tool_id=tool.id) }}">{{ tool.name }}</a></td>
+                        <td>{{ tool.rack_name or 'Brak' }}</td>
+                        <td>{{ tool.shelf }} / {{ tool.position }}</td>
+                        <td>
+                            {% if tool.archive %}
+                            <span class="pill pill-warn">archiwum</span>
+                            {% else %}
+                            <span class="pill pill-ok">aktywne</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4">Brak danych do wyświetlenia.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="section-heading">
+            <h3>Obsadzenie regałów</h3>
+            <a href="{{ url_for('racks') }}">Przejdź do widoku regałów</a>
+        </div>
+        <div class="rack-overview-list">
+            {% for rack in racks %}
+            <div class="rack-overview-item">
+                <div>
+                    <strong>{{ rack.name }}</strong>
+                    <span>{{ rack.description or 'Bez opisu' }}</span>
+                </div>
+                <div class="pill pill-neutral">{{ rack['items']|length }} narzędzi</div>
+            </div>
+            {% else %}
+            <p class="muted">Brak regałów w bazie danych.</p>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="panel">
+        <div class="section-heading">
+            <h3>Zadania</h3>
+            <div class="action-row">
+                <a href="{{ url_for('tasks') }}">Zobacz wszystkie</a>
+                <a class="ghost-button" href="{{ url_for('task_create') }}">Dodaj zadanie</a>
+            </div>
+        </div>
+        <div class="task-list">
+            {% for task in tasks %}
+            <div class="task-item {% if task.is_done %}is-done{% endif %}">
+                <div>
+                    <strong>{{ task.title }}</strong>
+                    <div class="muted small-text">
+                        Priorytet: {{ task.priority }}
+                        {% if task.due_date %} · Termin: {{ task.due_date.strftime('%Y-%m-%d') }}{% endif %}
+                    </div>
+                </div>
+                <div class="pill {% if task.is_done %}pill-ok{% elif task.priority == 'high' %}pill-warn{% else %}pill-neutral{% endif %}">
+                    {% if task.is_done %}zrobione{% else %}otwarte{% endif %}
+                </div>
+            </div>
+            {% else %}
+            <p class="muted">Brak otwartych zadań.</p>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="section-heading">
+            <h3>Szybki dostęp</h3>
+        </div>
+        <div class="quick-link-grid">
+            <a class="quick-link-card" href="{{ url_for('light_mode') }}">
+                <strong>Wersja light</strong>
+                <span>Wyszukiwarka bez logowania z podglądem regału.</span>
+            </a>
+            <a class="quick-link-card" href="{{ url_for('racks') }}">
+                <strong>Graficzna reprezentacja</strong>
+                <span>Podgląd regałów i położenia narzędzi.</span>
+            </a>
+            <a class="quick-link-card" href="{{ url_for('tasks') }}">
+                <strong>Lista zadań</strong>
+                <span>Kontroluj otwarte prace i terminy.</span>
+            </a>
+            <a class="quick-link-card" href="{{ url_for('suggestions') }}">
+                <strong>Sugestie</strong>
+                <span>Zgłaszaj pomysły i dołączaj pliki do weryfikacji.</span>
+            </a>
+            <a class="quick-link-card" href="{{ url_for('help_page') }}">
+                <strong>Pomoc</strong>
+                <span>Samouczek obsługi i informacje o programie.</span>
+            </a>
+        </div>
+    </article>
+</section>
+{% endblock %}

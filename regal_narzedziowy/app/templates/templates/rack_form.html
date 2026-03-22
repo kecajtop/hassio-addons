@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if rack %}Edycja regału{% else %}Nowy regał{% endif %} | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel form-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Regały</span>
+            <h2>{% if rack %}Edytuj regał{% else %}Dodaj regał{% endif %}</h2>
+        </div>
+        <a class="ghost-button" href="{{ url_for('racks') }}">Powrót do listy</a>
+    </div>
+
+    <form class="tool-form" method="post">
+        <label class="field field-wide">
+            <span>Nazwa</span>
+            <input type="text" name="name" value="{{ form_data.name }}" required>
+        </label>
+
+        <label class="field">
+            <span>Układ półek</span>
+            <input type="text" name="shelves" value="{{ form_data.shelves }}" placeholder="np. 1,2,3 lub A,B,C" required>
+        </label>
+
+        <label class="field">
+            <span>Orientacja</span>
+            <select name="orientation">
+                <option value="H" {% if form_data.orientation == 'H' %}selected{% endif %}>Horyzontalna</option>
+                <option value="V" {% if form_data.orientation == 'V' %}selected{% endif %}>Wertykalna</option>
+            </select>
+        </label>
+
+        <label class="field field-wide">
+            <span>Opis</span>
+            <textarea name="description" rows="4">{{ form_data.description }}</textarea>
+        </label>
+
+        <div class="field field-wide muted small-text form-note">
+            <span>Układ półek możesz podać jako liczbę półek albo listę etykiet rozdzielonych przecinkami.</span>
+        </div>
+
+        <div class="form-actions field-wide">
+            <button class="primary-button" type="submit">Zapisz regał</button>
+            <a class="ghost-button" href="{{ url_for('racks') }}">Anuluj</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

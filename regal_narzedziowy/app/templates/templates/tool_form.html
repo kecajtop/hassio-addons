@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if tool %}Edycja{% else %}Nowe narzędzie{% endif %} | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel form-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Formularz</span>
+            <h2>{% if tool %}Edytuj narzędzie{% else %}Dodaj narzędzie{% endif %}</h2>
+        </div>
+        <a class="ghost-button" href="{{ url_for('tools') }}">Powrót do listy</a>
+    </div>
+
+    <form class="tool-form" method="post" enctype="multipart/form-data">
+        <label class="field field-wide">
+            <span>Nazwa</span>
+            <input type="text" name="name" value="{{ form_data.name }}" required>
+        </label>
+
+        <label class="field field-wide">
+            <span>Opis</span>
+            <textarea name="description" rows="4">{{ form_data.description }}</textarea>
+        </label>
+
+        <label class="field">
+            <span>Regał</span>
+            <select name="rack_id" required>
+                <option value="">Wybierz</option>
+                {% for rack in racks %}
+                <option value="{{ rack.id }}" {% if form_data.rack_id|string == rack.id|string %}selected{% endif %}>{{ rack.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label class="field">
+            <span>Półka</span>
+            <input type="text" name="shelf" value="{{ form_data.shelf }}" required>
+        </label>
+
+        <label class="field">
+            <span>Pozycja</span>
+            <input type="text" name="position" value="{{ form_data.position }}" required>
+        </label>
+
+        <label class="field">
+            <span>Rozmiar</span>
+            <input type="number" step="0.01" name="size" value="{{ form_data.size }}">
+        </label>
+
+        <label class="field">
+            <span>Liczba LED</span>
+            <input type="number" name="led_count" value="{{ form_data.led_count }}">
+        </label>
+
+        <label class="field">
+            <span>Odstęp LED</span>
+            <input type="number" name="led_space" value="{{ form_data.led_space }}">
+        </label>
+
+        <label class="field">
+            <span>Ilość</span>
+            <input type="number" name="qty" value="{{ form_data.qty }}">
+        </label>
+
+        <label class="field field-wide">
+            <span>Link</span>
+            <input type="url" name="link" value="{{ form_data.link }}">
+        </label>
+
+        <label class="field field-wide">
+            <span>Ścieżka STL</span>
+            <input type="text" name="stl" value="{{ form_data.stl }}">
+        </label>
+
+        <div class="field field-wide image-manager">
+            <span>Zdjęcie narzędzia</span>
+            {% if form_data.image_url %}
+            <div class="image-manager-card">
+                <img class="tool-image-preview" src="{{ form_data.image_url }}" alt="Zdjęcie narzędzia {{ form_data.name }}">
+                <div class="image-manager-meta">
+                    <div><strong>Aktualny plik:</strong> {{ form_data.image }}</div>
+                    <label class="checkbox-field">
+                        <input type="checkbox" name="remove_image">
+                        <span>Usuń aktualne zdjęcie</span>
+                    </label>
+                </div>
+            </div>
+            {% else %}
+            <div class="form-note">Brak przypisanego zdjęcia. Pliki będą zapisywane w katalogu `image`.</div>
+            {% endif %}
+            <input type="hidden" name="image" value="{{ form_data.image }}">
+            <input type="file" name="image_file" accept=".png,.jpg,.jpeg,.webp,.gif">
+        </div>
+
+        <label class="checkbox-field field-wide">
+            <input type="checkbox" name="archive" {% if form_data.archive %}checked{% endif %}>
+            <span>Oznacz jako zarchiwizowane</span>
+        </label>
+
+        <div class="form-actions field-wide">
+            <button class="primary-button" type="submit">Zapisz</button>
+            <a class="ghost-button" href="{{ url_for('tools') }}">Anuluj</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

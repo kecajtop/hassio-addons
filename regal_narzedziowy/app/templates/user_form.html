@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Edycja użytkownika | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel form-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Dostęp lokalny</span>
+            <h2>Konfiguracja użytkownika</h2>
+        </div>
+        <a class="ghost-button" href="{{ url_for('users') }}">Powrót do listy</a>
+    </div>
+
+    <form class="tool-form user-form" method="post">
+        <label class="field">
+            <span>Login</span>
+            <input type="text" value="{{ form_data.username }}" readonly>
+        </label>
+
+        <label class="field">
+            <span>Imię i nazwisko</span>
+            <input type="text" value="{{ form_data.full_name }}" readonly>
+        </label>
+
+        <label class="field">
+            <span>Dział</span>
+            <input type="text" value="{{ form_data.department or '' }}" readonly disabled>
+        </label>
+
+        <div class="field field-wide form-note">
+            <span>Dane logowania i uprawnienia systemu zakupy są tylko do odczytu. Ten formularz zapisuje wyłącznie lokalny dostęp do aplikacji regału narzędziowego.</span>
+        </div>
+
+        <label class="field">
+            <span>Rola lokalna</span>
+            <select name="role" required>
+                {% for role in roles %}
+                <option value="{{ role }}" {% if form_data.role == role %}selected{% endif %}>{{ role }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label class="checkbox-field field-wide checkbox-field-card">
+            <input type="checkbox" name="is_active" {% if form_data.is_active %}checked{% endif %}>
+            <span>Włącz lokalny dostęp do systemu regału narzędziowego</span>
+        </label>
+
+        <div class="field-wide muted small-text">
+            {% if form_data.last_login %}
+            Ostatnie logowanie lokalne: {{ form_data.last_login.strftime('%Y-%m-%d %H:%M') }}
+            {% else %}
+            Brak lokalnego logowania.
+            {% endif %}
+        </div>
+
+        <div class="form-actions field-wide">
+            <button class="primary-button" type="submit">Zapisz lokalny dostęp</button>
+            <a class="ghost-button" href="{{ url_for('users') }}">Anuluj</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

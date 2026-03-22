@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Zadania | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Zadania</span>
+            <h2>Lista zadań</h2>
+        </div>
+        <div class="action-row">
+            <a class="ghost-button" href="{{ url_for('light_mode') }}">Wersja light</a>
+            <a class="primary-button" href="{{ url_for('task_create') }}">Dodaj zadanie</a>
+        </div>
+    </div>
+
+    <form class="filters users-filters" method="get">
+        <label class="checkbox-field checkbox-field-card">
+            <input type="checkbox" name="show_done" value="1" {% if show_done %}checked{% endif %} onchange="this.form.submit()">
+            <span>Pokaż ukończone zadania</span>
+        </label>
+    </form>
+</section>
+
+<section class="panel table-panel">
+    <div class="task-list">
+        {% for task in tasks %}
+        <div class="task-item {% if task.is_done %}is-done{% endif %}">
+            <div class="task-item-main">
+                <div class="task-item-header">
+                    <strong>{{ task.title }}</strong>
+                    <span class="pill {% if task.is_done %}pill-ok{% elif task.priority == 'high' %}pill-warn{% else %}pill-neutral{% endif %}">{{ task.priority }}</span>
+                </div>
+                {% if task.description %}
+                <div class="muted">{{ task.description }}</div>
+                {% endif %}
+                <div class="muted small-text">
+                    {% if task.due_date %}Termin: {{ task.due_date.strftime('%Y-%m-%d') }} · {% endif %}
+                    Dodane przez: {{ task.created_by or 'brak' }}
+                </div>
+            </div>
+            <div class="action-row">
+                <form method="post" action="{{ url_for('task_toggle', task_id=task.id) }}">
+                    <button class="ghost-button" type="submit">{% if task.is_done %}Otwórz{% else %}Zamknij{% endif %}</button>
+                </form>
+                <a class="ghost-button" href="{{ url_for('task_edit', task_id=task.id) }}">Edytuj</a>
+                {% if role_hierarchy[g.user.role] >= role_hierarchy['manager'] %}
+                <form method="post" action="{{ url_for('task_delete', task_id=task.id) }}" onsubmit="return confirm('Usunąć zadanie?');">
+                    <button class="ghost-button ghost-button-danger" type="submit">Usuń</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <p class="muted">Brak zadań do wyświetlenia.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,7 +1,0 @@
----
-build_from:
-  armhf: homeassistant/armhf-addon-mariadb:latest
-  armv7: homeassistant/armv7-addon-mariadb:latest
-  aarch64: homeassistant/aarch64-addon-mariadb:latest
-  amd64: homeassistant/amd64-addon-mariadb:latest
-  i386: homeassistant/i386-addon-mariadb:latest

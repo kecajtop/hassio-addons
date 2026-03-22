@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if task %}Edycja zadania{% else %}Nowe zadanie{% endif %} | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel form-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Zadania</span>
+            <h2>{% if task %}Edytuj zadanie{% else %}Dodaj zadanie{% endif %}</h2>
+        </div>
+        <a class="ghost-button" href="{{ url_for('tasks') }}">Powrót do listy</a>
+    </div>
+
+    <form class="tool-form" method="post">
+        <label class="field field-wide">
+            <span>Tytuł</span>
+            <input type="text" name="title" value="{{ form_data.title }}" required>
+        </label>
+
+        <label class="field field-wide">
+            <span>Opis</span>
+            <textarea name="description" rows="4">{{ form_data.description }}</textarea>
+        </label>
+
+        <label class="field">
+            <span>Priorytet</span>
+            <select name="priority">
+                <option value="low" {% if form_data.priority == 'low' %}selected{% endif %}>Niski</option>
+                <option value="normal" {% if form_data.priority == 'normal' %}selected{% endif %}>Normalny</option>
+                <option value="high" {% if form_data.priority == 'high' %}selected{% endif %}>Wysoki</option>
+            </select>
+        </label>
+
+        <label class="field">
+            <span>Termin</span>
+            <input type="date" name="due_date" value="{{ form_data.due_date }}">
+        </label>
+
+        <label class="checkbox-field checkbox-field-card">
+            <input type="checkbox" name="is_done" {% if form_data.is_done %}checked{% endif %}>
+            <span>Oznacz jako wykonane</span>
+        </label>
+
+        <div class="form-actions field-wide">
+            <button class="primary-button" type="submit">Zapisz zadanie</button>
+            <a class="ghost-button" href="{{ url_for('tasks') }}">Anuluj</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

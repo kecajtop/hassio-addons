@@ -1,0 +1,50 @@
+name: Regal Narzedziowy
+version: "0.1.2"
+slug: regal_narzedziowy
+description: Uruchamia aplikacje Regal Narzedziowy jako dodatek Home Assistant na porcie 5001.
+url: https://example.local/regal-narzedziowy
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - i386
+startup: application
+boot: auto
+init: false
+ports:
+  5001/tcp: 5001
+ports_description:
+  5001/tcp: Panel Regal Narzedziowy
+webui: http://[HOST]:[PORT:5001]
+panel_icon: mdi:toolbox-outline
+panel_title: Regal Narzedziowy
+options:
+  port: 5001
+  secret_key: change-me-regal
+  db_host: 10.0.3.1
+  db_port: 3306
+  db_user: root
+  db_password: regal
+  db_name: regal_narzedziowy
+  auth_db_host: 10.0.3.1
+  auth_db_port: 3306
+  auth_db_user: root
+  auth_db_password: regal
+  auth_db_name: zakupy1
+  auth_db_users_table: users
+  session_cookie_name: regal_narzedziowy_session
+schema:
+  port: port
+  secret_key: password
+  db_host: str
+  db_port: port
+  db_user: str
+  db_password: password
+  db_name: str
+  auth_db_host: str
+  auth_db_port: port
+  auth_db_user: str
+  auth_db_password: password
+  auth_db_name: str
+  auth_db_users_table: str
+  session_cookie_name: str

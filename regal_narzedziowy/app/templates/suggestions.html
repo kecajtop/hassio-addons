@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Sugestie | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel form-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Sugestie</span>
+            <h2>Dodaj sugestię</h2>
+        </div>
+        <a class="ghost-button" href="{{ url_for('dashboard') }}">Powrót do pulpitu</a>
+    </div>
+
+    <form class="tool-form" method="post" enctype="multipart/form-data" id="suggestions-form">
+        <input type="hidden" name="pasted_attachments" id="suggestion-pasted-attachments" value="[]">
+
+        <label class="field field-wide">
+            <span>Temat</span>
+            <input type="text" name="topic" value="{{ form_data.topic }}" required>
+        </label>
+
+        <label class="field field-wide">
+            <span>Opis</span>
+            <textarea name="content" rows="6" placeholder="Opisz problem, pomysł albo zmianę do wdrożenia.">{{ form_data.content }}</textarea>
+        </label>
+
+        <label class="field field-wide">
+            <span>Załączniki</span>
+            <input type="file" name="attachments" id="suggestion-attachments-input" multiple>
+            <div id="suggestion-paste-zone" class="suggestion-paste-zone" tabindex="0">
+                <strong>Wklej obraz ze schowka</strong>
+                <span>Naciśnij Ctrl+V w tym polu albo podczas pisania opisu, aby dodać zrzut ekranu bez zapisywania go do pliku.</span>
+            </div>
+            <div id="suggestion-attachments-status" class="muted small-text">Możesz dodać wiele plików. Załączniki zostaną zapisane bezpośrednio w bazie danych `zakupy1`.</div>
+            <div id="suggestion-attachments-preview" class="suggestion-attachments-preview is-hidden"></div>
+        </label>
+
+        <div class="form-actions field-wide">
+            <button class="primary-button" type="submit">Zapisz sugestię</button>
+            <a class="ghost-button" href="{{ url_for('dashboard') }}">Anuluj</a>
+        </div>
+    </form>
+</section>
+
+<section class="panel table-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Historia</span>
+            <h2>{% if can_view_all %}Ostatnie sugestie użytkowników{% else %}Twoje sugestie{% endif %}</h2>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Temat</th>
+                    <th>Opis</th>
+                    <th>Autor</th>
+                    <th>Status</th>
+                    <th>Załączniki</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for suggestion in suggestions %}
+                <tr>
+                    <td><strong>{{ suggestion.topic }}</strong></td>
+                    <td>{{ suggestion.content or 'Brak opisu' }}</td>
+                    <td>{{ suggestion.author_name }}</td>
+                    <td><span class="pill pill-neutral">{{ suggestion.status }}</span></td>
+                    <td>
+                        {% if suggestion.attachments %}
+                        <div class="action-row">
+                            {% for attachment in suggestion.attachments %}
+                            <a class="ghost-button" href="{{ url_for('suggestion_attachment_download', attachment_id=attachment.id) }}">{{ attachment.filename }}</a>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <span class="muted">Brak</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ suggestion.created_at.strftime('%Y-%m-%d %H:%M') if suggestion.created_at else '-' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">Brak sugestii do wyświetlenia.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+<script src="{{ url_for('static', filename='js/suggestions.js', v='20260319b') }}"></script>
+{% endblock %}

@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}Regały | Regał narzędziowy{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Regały</span>
+            <h2>Lista regałów</h2>
+        </div>
+        <div class="action-row">
+            <a class="ghost-button" href="{{ url_for('tools') }}">Przejdź do listy narzędzi</a>
+            {% if can_manage_racks %}
+            <a class="primary-button" href="{{ url_for('rack_create') }}">Dodaj regał</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Układ półek</th>
+                    <th>Orientacja</th>
+                    <th>Zamiana osi</th>
+                    <th>Narzędzia</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rack in racks %}
+                <tr>
+                    <td><strong>{{ rack.name }}</strong></td>
+                    <td>{{ rack.description or 'Bez opisu' }}</td>
+                    <td>
+                        <div>{{ rack.shelf_count }} półek</div>
+                        <div class="muted small-text">{{ rack.shelves or 'Brak danych' }}</div>
+                    </td>
+                    <td>{{ rack.orientation or 'H' }}</td>
+                    <td>{% if rack.swap_axes %}Tak{% else %}Nie{% endif %}</td>
+                    <td>{{ rack['items']|length }}</td>
+                    <td>
+                        <div class="action-row">
+                            {% if can_manage_racks %}
+                            <a class="ghost-button" href="{{ url_for('rack_edit', rack_id=rack.id) }}">Edytuj</a>
+                            <form method="post" action="{{ url_for('rack_delete', rack_id=rack.id) }}" onsubmit="return confirm('Usunąć regał?');">
+                                <button class="ghost-button ghost-button-danger" type="submit">Usuń</button>
+                            </form>
+                            {% endif %}
+                            <a class="ghost-button" href="{{ url_for('tools', rack_id=rack.id) }}">Pokaż narzędzia</a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">Brak regałów do wyświetlenia.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel table-panel">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">Podgląd</span>
+            <h2>Graficzna reprezentacja regału</h2>
+        </div>
+    </div>
+
+    <div class="rack-visual-layout">
+        <div class="rack-visual-sidebar">
+            <div class="rack-preview-search rack-preview-search-block">
+                <label class="field">
+                    <span>Wyszukaj regał</span>
+                    <input id="rack-preview-rack-search-input" type="text" placeholder="Nazwa, opis, orientacja lub układ półek">
+                </label>
+                <div id="rack-preview-rack-search-status" class="muted small-text">Wpisz fragment nazwy lub opisu regału.</div>
+            </div>
+
+            <label class="field">
+                <span>Wybierz regał</span>
+                <select id="rack-preview-select">
+                    {% for rack in racks %}
+                    <option value="{{ rack.id }}">{{ rack.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <div id="rack-preview-meta" class="rack-preview-meta"></div>
+            <div class="rack-preview-search">
+                <label class="field">
+                    <span>Wyszukaj narzędzie</span>
+                    <input id="rack-preview-search-input" type="text" placeholder="Nazwa, numer, półka lub pozycja">
+                </label>
+                <div id="rack-preview-search-status" class="muted small-text">Stała lista została usunięta. Wpisz fragment nazwy, numeru albo lokalizacji albo kliknij pole regału.</div>
+                <div id="rack-preview-items" class="rack-preview-search-results"></div>
+            </div>
+        </div>
+
+        <div class="rack-visual-canvas-wrap">
+            <canvas id="rack-preview-canvas" width="880" height="420"></canvas>
+            <div id="rack-context-menu" class="rack-context-menu is-hidden" aria-hidden="true">
+                <div id="rack-context-menu-content" class="rack-context-menu-content"></div>
+            </div>
+            <div id="rack-preview-diagnostic" class="rack-preview-diagnostic is-hidden" aria-live="polite"></div>
+            <div class="rack-color-legend" aria-label="Legenda kolorów regału">
+                <div class="rack-color-legend-title">Legenda kolorów:</div>
+                <div class="rack-color-legend-list">
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-empty"></span><span>Puste miejsce</span></div>
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-tool"></span><span>Narzędzie dostępne</span></div>
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-archived"></span><span>Narzędzie archiwalne</span></div>
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-hover"></span><span>Podświetlone (hover)</span></div>
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-selected"></span><span>Znalezione w wyszukiwaniu</span></div>
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-multi"></span><span>Wiele narzędzi w jednej pozycji</span></div>
+                    <div class="rack-color-legend-item"><span class="rack-color-swatch rack-color-selected-multi"></span><span>Znalezione - wiele narzędzi</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="rack-image-modal" class="image-modal is-hidden" aria-hidden="true">
+    <div class="image-modal-backdrop" data-close-rack-image-modal="true"></div>
+    <div class="image-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="rack-image-modal-title">
+        <div class="image-modal-header">
+            <strong id="rack-image-modal-title">Podgląd zdjęcia</strong>
+            <button class="ghost-button" type="button" data-close-rack-image-modal="true">Zamknij</button>
+        </div>
+        <div class="image-modal-body">
+            <img id="rack-image-modal-preview" class="image-modal-preview" src="" alt="Podgląd zdjęcia narzędzia">
+        </div>
+    </div>
+</div>
+
+<div id="rack-details-modal" class="image-modal is-hidden" aria-hidden="true">
+    <div class="image-modal-backdrop" data-close-rack-details-modal="true"></div>
+    <div class="image-modal-dialog rack-details-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="rack-details-modal-title">
+        <div class="image-modal-header">
+            <strong id="rack-details-modal-title">Szczegóły narzędzia</strong>
+            <button class="ghost-button" type="button" data-close-rack-details-modal="true">Zamknij</button>
+        </div>
+        <div id="rack-details-modal-body" class="rack-details-modal-body"></div>
+    </div>
+</div>
+
+<div id="rack-move-modal" class="image-modal is-hidden" aria-hidden="true">
+    <div class="image-modal-backdrop" data-close-rack-move-modal="true"></div>
+    <div class="image-modal-dialog rack-move-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="rack-move-modal-title">
+        <div class="image-modal-header">
+            <strong id="rack-move-modal-title">Przenieś narzędzie</strong>
+            <button class="ghost-button" type="button" data-close-rack-move-modal="true">Zamknij</button>
+        </div>
+        <form id="rack-move-form" class="tool-form rack-move-form" method="post">
+            <div id="rack-move-form-tool" class="form-note field-wide">Wybierz nowe miejsce dla narzędzia.</div>
+            <label class="field">
+                <span>Regał</span>
+                <select id="rack-move-rack-id" name="rack_id">
+                    {% for rack in racks %}
+                    <option value="{{ rack.id }}">{{ rack.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="field">
+                <span>Półka</span>
+                <input id="rack-move-shelf" type="text" name="shelf" required>
+            </label>
+            <label class="field">
+                <span>Pozycja</span>
+                <input id="rack-move-position" type="text" name="position" required>
+            </label>
+            <div class="form-actions field-wide">
+                <button class="primary-button" type="submit">Przenieś</button>
+                <button class="ghost-button" type="button" data-close-rack-move-modal="true">Anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script
+    id="racks-json"
+    type="application/json"
+    data-tool-create-url="{{ url_for('tool_create') }}"
+    data-tool-edit-template="{{ url_for('tool_edit', tool_id=0) }}"
+    data-tool-delete-template="{{ url_for('tool_delete', tool_id=0) }}"
+    data-tool-move-template="{{ url_for('tool_move', tool_id=0) }}"
+    data-can-add-tools="{{ 1 if can_add_tools else 0 }}"
+    data-can-edit-tools="{{ 1 if can_edit_tools else 0 }}"
+    data-can-delete-tools="{{ 1 if can_delete_tools else 0 }}"
+    data-can-move-tools="{{ 1 if can_move_tools else 0 }}"
+>{{ racks_json|tojson }}</script>
+<script src="{{ url_for('static', filename='js/rack_visualization.js', v='20260319l') }}"></script>
+<script src="{{ url_for('static', filename='js/racks_page.js', v='20260319l') }}"></script>
+{% endblock %}
